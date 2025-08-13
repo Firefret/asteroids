@@ -13,18 +13,22 @@ def main():
     print(f"Screen height: {SCREEN_HEIGHT}")
     clock = pygame.time.Clock()
     dt = 0
+
     updatable = pygame.sprite.Group()
     drawable = pygame.sprite.Group()
     asteroids = pygame.sprite.Group()
+
     Asteroid.containers = (updatable, drawable, asteroids)
     Player.containers = (updatable, drawable)
     AsteroidField.containers = updatable
+
     asteroid_field = AsteroidField()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
 
     pygame.display.set_caption("Asteroids")
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 
+    ## Main game loop
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -36,6 +40,11 @@ def main():
         for thing in drawable:
             thing.draw(screen)
         pygame.display.flip()
+
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
+                print("Game Over!")
+                return
 
         dt = clock.tick(200)/1000
 
